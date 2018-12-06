@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+  pg-data:
+
+services:
+  fakturomat:
+    build: .
+    environment:
+      - DB_HOST=db
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+  db:
+    image: postgres:10
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"

@@ -1,0 +1,32 @@
+{%  extends 'szkielet.html' %}
+{% block tytul %}
+Wygeneruj fakture
+{% endblock %}
+
+{% block zawartosc %}
+
+<form class="form-inline"
+	role="form"
+	action="{{ faktura.id }}/faktura"
+	method="post">
+{% csrf_token %}
+{%  if faktura.pozycje.all %}
+    <table style="width:100%">
+        {% for poz in faktura.pozycje.all %}
+            <tr>
+            <td>{{ poz.nazwa }}</td>
+            <td><input type="text" placeholder="wyswietlana nazwa" id="wysw_nazwa"></td>
+            <td><input type="text" placeholder="ile" id="ile">({{poz.jm}})</td>
+            <td><input type="text" placeholder="% podatku" id="podatek"></td>
+            <td><input type="text" placeholder="cena netto"></td>
+             <input type="hidden" name="poz_id" value="{{ poz.id }}">
+            </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="Wygeneruj fakture!">
+
+{% else %}
+Nie ma tu nic do wyświetlenia.
+{% endif %}
+    <a href="{{ faktura.id }}/faktura">Pokaz fakture (albo blad jak jej jeszcze nie ma)</a>
+{% endblock %}

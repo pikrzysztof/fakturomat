@@ -1,0 +1,63 @@
+\documentclass[12pt]{article}
+\usepackage[MeX]{polski}
+\usepackage[latin2]{inputenc}
+
+\setlength{\marginparwidth}{0pt}
+\setlength{\parindent}{0pt}
+\addtolength{\hoffset}{-50pt}
+\pagestyle{empty}
+
+% Tu wpisaæ dane do faktury!
+\newcommand{\datasprzedazy}{3.03.2006}
+\newcommand{\terminplatnosci}{17.03.2006}
+\newcommand{\nrfaktury}{3/2006} 
+\newcommand{\netto}{1000.00} 
+\newcommand{\vat}{220.00}
+\newcommand{\brutto}{1220.00}
+\newcommand{\slownie}{jeden tysi±c dwie¶cie dwadzie¶cia z³otych}
+% Koniec danych do faktury
+
+\begin{document}
+
+ \begin{tabular}{p{0.8\textwidth} l l}
+  \textit{Sprzedawca:} & Data sprzeda¿y: & \datasprzedazy \\
+   & Data wystawienia: & \datasprzedazy \\
+  Jan Kowalski & & \\
+  ul. U¿ytkowników Windy 283/9999999 & & \\
+  50-000 Wroc³aw & & \\
+  NIP 123-456-78-90 & &
+ \end{tabular}
+ \ \\ \ \\
+ \centerline{\hspace{50pt}\LARGE{Faktura VAT nr \nrfaktury}}\\
+ \centerline{\hspace{50pt}(orygina³ / kopia)}\\
+ \ \\
+ \textit{Nabywca:} \\
+ \ \\
+ Micro\$oft Corp. \\
+ ul. Gdzie¶ w Redmond \\
+ Gdzie¶ w USA \\
+
+ \begin{tabular}{r l l r p{2cm} p{2cm} l r p{2cm}}
+  \hline 
+  Lp & Nazwa us³ugi & j.m. & Ilo¶æ & Cena jedn.\newline netto & Warto¶æ netto & VAT & Podatek & Warto¶æ z podatkiem \\ 
+  \hline
+  1 & Straty moralne & szt & 1 & \netto & \netto & 22 \% & \vat & \brutto \\
+  \hline
+  & & & & Razem: & \netto & & \vat & \brutto \\
+  & & & & W tym: & \netto & 22 \% & \vat & \brutto \\
+  \\
+  
+ \end{tabular}
+
+ \ \\
+ S³ownie: \slownie\\
+ \ \\
+ Forma p³atno¶ci: PRZELEW \\
+ Termin p³atno¶ci: \terminplatnosci \\
+
+
+ \ \\ \ \\ \ \\
+ ..............................\hspace{220pt}..............................\\
+ \ \ \ Osoba odbieraj±ca\hspace{225pt}\mbox{Osoba wystawiaj±ca}
+
+\end{document}
