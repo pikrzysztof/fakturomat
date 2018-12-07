@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PrzedmiotUmowy, Firma, Faktura, JednostkaMiary
+from .models import PrzedmiotUmowy, Firma, Faktura, JednostkaMiary, FormaPlatnosci
 
 class PrzedmiotUmowyAdmin(admin.ModelAdmin):
 	pass
@@ -20,3 +20,8 @@ class JednostkaMiaryAdmin(admin.ModelAdmin):
 	pass
 
 admin.site.register(JednostkaMiary, JednostkaMiaryAdmin)
+
+class FormaPlatnosciAdmin(admin.ModelAdmin):
+	pass
+
+admin.site.register(FormaPlatnosci, FormaPlatnosciAdmin)

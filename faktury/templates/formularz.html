@@ -7,18 +7,25 @@ Wygeneruj fakture
 
 <form class="form-inline"
 	role="form"
-	action="{{ faktura.id }}/faktura"
+	action="{{ faktura.id }}/faktura.pdf"
 	method="post">
 {% csrf_token %}
 {%  if faktura.pozycje.all %}
     <table style="width:100%">
+    <tr>
+        <td>nazwa</td>
+        <td>wyświetlana nazwa (opcjonalnie)</td>
+        <td>ile j.m.</td>
+        <td>% podatku</td>
+        <td>cena netto</td>
+    </tr>
         {% for poz in faktura.pozycje.all %}
             <tr>
             <td>{{ poz.nazwa }}</td>
-            <td><input type="text" placeholder="wyswietlana nazwa" id="wysw_nazwa"></td>
-            <td><input type="text" placeholder="ile" id="ile">({{poz.jm}})</td>
-            <td><input type="text" placeholder="% podatku" id="podatek"></td>
-            <td><input type="text" placeholder="cena netto"></td>
+            <td><input type="text" name="wyswietlana_nazwa" placeholder="wyswietlana nazwa" id="wysw_nazwa"></td>
+            <td><input type="text" name="ile" placeholder="ile" >({{poz.jm}})</td>
+            <td><input type="text" name="podatek" placeholder="% podatku"></td>
+            <td><input type="text" name="netto" placeholder="cena netto"></td>
              <input type="hidden" name="poz_id" value="{{ poz.id }}">
             </tr>
         {% endfor %}
@@ -28,5 +35,5 @@ Wygeneruj fakture
 {% else %}
 Nie ma tu nic do wyświetlenia.
 {% endif %}
-    <a href="{{ faktura.id }}/faktura">Pokaz fakture (albo blad jak jej jeszcze nie ma)</a>
+    <a href="{{ faktura.id }}/faktura.pdf">Pokaz fakture (albo blad jak jej jeszcze nie ma)</a>
 {% endblock %}

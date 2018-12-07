@@ -1,2 +1,4 @@
 Django>=2.0
 psycopg2
+slownie
+jinja2

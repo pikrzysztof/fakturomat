@@ -1,63 +1,82 @@
 \documentclass[12pt]{article}
 \usepackage[MeX]{polski}
-\usepackage[latin2]{inputenc}
+\usepackage[utf8]{inputenc}
 
 \setlength{\marginparwidth}{0pt}
 \setlength{\parindent}{0pt}
 \addtolength{\hoffset}{-50pt}
 \pagestyle{empty}
 
-% Tu wpisaæ dane do faktury!
-\newcommand{\datasprzedazy}{3.03.2006}
-\newcommand{\terminplatnosci}{17.03.2006}
-\newcommand{\nrfaktury}{3/2006} 
-\newcommand{\netto}{1000.00} 
-\newcommand{\vat}{220.00}
-\newcommand{\brutto}{1220.00}
-\newcommand{\slownie}{jeden tysi±c dwie¶cie dwadzie¶cia z³otych}
+% Tu wpisac dane do faktury!
+% \newcommand{\data_wystawienia_faktury}{ {{ faktura.data_wystawienia }} }
+%\newcommand{\terminplatnosci}{17.03.2006}
+\newcommand{\nrfaktury}{ {{ faktura.numer }} }
+\newcommand{\netto}{ {{ netto_total }} }
+\newcommand{\vat}{ {{ vat }} }
+\newcommand{\brutto}{ {{ netto_total + vat }} }
+\newcommand{\slownie}{ {{ slownie_brutto }} }
 % Koniec danych do faktury
 
 \begin{document}
 
  \begin{tabular}{p{0.8\textwidth} l l}
-  \textit{Sprzedawca:} & Data sprzeda¿y: & \datasprzedazy \\
-   & Data wystawienia: & \datasprzedazy \\
-  Jan Kowalski & & \\
-  ul. U¿ytkowników Windy 283/9999999 & & \\
-  50-000 Wroc³aw & & \\
-  NIP 123-456-78-90 & &
+  \textit{Sprzedawca:} & & \\ %& Data sprzedaÅ¼y: & \data_wystawienia_ \\
+   & Data wystawienia: & {{ faktura.data_wystawienia }} \\
+   {{ faktura.wystawiajacy.nazwa }} & & \\
+   {{ faktura.wystawiajacy.adres_pierwsza_linijka }} & & \\
+   {% if faktura.wystawiajacy.adres_druga_linijka %}
+   {{ faktura.wystawiajacy.adres_druga_linijka }} & & \\
+   {% if faktura.wystawiajacy.adres_trzecia_linijka %}
+   {{ faktura.wystawiajacy.adres_trzecia_linijka }} & & \\
+   {% if faktura.wystawiajacy.adres_czwarta_linijka %}
+   {{ faktura.wystawiajacy.adres_czwarta_linijka }} & & \\
+   {% endif %}
+   {% endif %}
+   {% endif %}
+  NIP {{ faktura.wystawiajacy.nip }} & &
  \end{tabular}
  \ \\ \ \\
- \centerline{\hspace{50pt}\LARGE{Faktura VAT nr \nrfaktury}}\\
- \centerline{\hspace{50pt}(orygina³ / kopia)}\\
+ \centerline{\hspace{50pt}\LARGE{Faktura VAT nr {{ faktura.numer }}  } }\\
+ \centerline{\hspace{50pt}(oryginaÅ‚ / kopia)}\\
  \ \\
  \textit{Nabywca:} \\
  \ \\
- Micro\$oft Corp. \\
- ul. Gdzie¶ w Redmond \\
- Gdzie¶ w USA \\
+   {{ faktura.klient.nazwa }} \\
+   {{ faktura.klient.adres_pierwsza_linijka }} \\
+   {% if faktura.klient.adres_druga_linijka %}
+   {{ faktura.klient.adres_druga_linijka }} \\
+   {% if faktura.klient.adres_trzecia_linijka %}
+   {{ faktura.klient.adres_trzecia_linijka }} \\
+   {% if faktura.klient.adres_czwarta_linijka %}
+   {{ faktura.klient.adres_czwarta_linijka }} \\
+   {% endif %}
+   {% endif %}
+   {% endif %}
+  NIP {{ faktura.klient.nip }} 
 
  \begin{tabular}{r l l r p{2cm} p{2cm} l r p{2cm}}
   \hline 
-  Lp & Nazwa us³ugi & j.m. & Ilo¶æ & Cena jedn.\newline netto & Warto¶æ netto & VAT & Podatek & Warto¶æ z podatkiem \\ 
-  \hline
-  1 & Straty moralne & szt & 1 & \netto & \netto & 22 \% & \vat & \brutto \\
+  Lp & Nazwa usÅ‚ugi & j.m. & IloÅ›Ä‡ & Cena jedn.\newline netto & WartoÅ›Ä‡ netto & VAT & Podatek & WartoÅ›Ä‡ z podatkiem \\ 
+   \hline
+   {% for poz in pozycje %}
+   1 & {{ poz.wyswietlana_nazwa or poz.nazwa }} & {{ poz.jm }} & {{ poz.ile }} & {{ poz.netto_za_sztuke }} & {{ poz.wartosc_netto }} & {{ poz.podatek_proc }} \% & {{ poz.podatek_zl }} & {{ poz.brutto }} \\
+   {% endfor %}
   \hline
   & & & & Razem: & \netto & & \vat & \brutto \\
-  & & & & W tym: & \netto & 22 \% & \vat & \brutto \\
+%   & & & & W tym: & \netto &  & \vat & \brutto \\
   \\
   
  \end{tabular}
 
  \ \\
- S³ownie: \slownie\\
+ SÅ‚ownie: {{ slownie_brutto }}\\
  \ \\
- Forma p³atno¶ci: PRZELEW \\
- Termin p³atno¶ci: \terminplatnosci \\
+ Forma pÅ‚atnoÅ›ci: {{ faktura.forma_platnosci }} \\
+ Termin pÅ‚atnoÅ›ci: {{ faktura.termin_platnosci }} \\
 
 
  \ \\ \ \\ \ \\
  ..............................\hspace{220pt}..............................\\
- \ \ \ Osoba odbieraj±ca\hspace{225pt}\mbox{Osoba wystawiaj±ca}
+ \ \ \ Osoba odbierajÄ…ca\hspace{225pt}\mbox{Osoba wystawiajÄ…ca}
 
 \end{document}
