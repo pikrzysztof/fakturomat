@@ -18,7 +18,6 @@
 % Koniec danych do faktury
 
 \begin{document}
-
  \begin{tabular}{p{0.8\textwidth} l l}
   \textit{Sprzedawca:} & & \\ %& Data sprzedaży: & \data_wystawienia_ \\
    & Data wystawienia: & {{ faktura.data_wystawienia }} \\
@@ -35,31 +34,22 @@
    {% endif %}
   NIP {{ faktura.wystawiajacy.nip }} & &
  \end{tabular}
- \ \\ \ \\
  \centerline{\hspace{50pt}\LARGE{Faktura VAT nr {{ faktura.numer }}  } }\\
  \centerline{\hspace{50pt}(oryginał / kopia)}\\
- \ \\
  \textit{Nabywca:} \\
- \ \\
    {{ faktura.klient.nazwa }} \\
    {{ faktura.klient.adres_pierwsza_linijka }} \\
-   {% if faktura.klient.adres_druga_linijka %}
-   {{ faktura.klient.adres_druga_linijka }} \\
-   {% if faktura.klient.adres_trzecia_linijka %}
-   {{ faktura.klient.adres_trzecia_linijka }} \\
-   {% if faktura.klient.adres_czwarta_linijka %}
-   {{ faktura.klient.adres_czwarta_linijka }} \\
-   {% endif %}
-   {% endif %}
-   {% endif %}
+   {% if faktura.klient.adres_druga_linijka %}   {{ faktura.klient.adres_druga_linijka }} \\
+   {% if faktura.klient.adres_trzecia_linijka %}   {{ faktura.klient.adres_trzecia_linijka }} \\
+   {% if faktura.klient.adres_czwarta_linijka %}   {{ faktura.klient.adres_czwarta_linijka }} \\   {% endif %}   {% endif %}   {% endif %}
   NIP {{ faktura.klient.nip }} 
-
+\\ \ \\
  \begin{tabular}{r l l r p{2cm} p{2cm} l r p{2cm}}
   \hline 
   Lp & Nazwa usługi & j.m. & Ilość & Cena jedn.\newline netto & Wartość netto & VAT & Podatek & Wartość z podatkiem \\ 
    \hline
    {% for poz in pozycje %}
-   1 & {{ poz.wyswietlana_nazwa or poz.nazwa }} & {{ poz.jm }} & {{ poz.ile }} & {{ poz.netto_za_sztuke }} & {{ poz.wartosc_netto }} & {{ poz.podatek_proc }} \% & {{ poz.podatek_zl }} & {{ poz.brutto }} \\
+   {{ loop.index }} & {{ poz.wyswietlana_nazwa or poz.nazwa }} & {{ poz.jm }} & {{ poz.ile }} & {{ poz.netto_za_sztuke }} & {{ poz.wartosc_netto }} & {{ poz.podatek_proc }} \% & {{ poz.podatek_zl }} & {{ poz.brutto }} \\
    {% endfor %}
   \hline
   & & & & Razem: & \netto & & \vat & \brutto \\

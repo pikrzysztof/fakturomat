@@ -71,5 +71,4 @@ class Faktura(models.Model):
 	class Meta:
 		verbose_name_plural = "Faktury"
 
-
 # Create your models here.

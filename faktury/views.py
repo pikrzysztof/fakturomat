@@ -75,6 +75,8 @@ def gen_faktura(request, id_faktury):
 def healthz(_request):
 	return HttpResponse(status=200)
 
+def glowna(_request):
+	return render(_request, 'glowna.html', {'faktury': Faktura.objects.all()})
 
 
 def tex_escape(text):
