@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \usepackage[MeX]{polski}
 \usepackage[utf8]{inputenc}
 
@@ -6,7 +6,7 @@
 \setlength{\parindent}{0pt}
 \addtolength{\hoffset}{-50pt}
 \pagestyle{empty}
-
+\usepackage[margin=3cm]{geometry}
 % Tu wpisac dane do faktury!
 % \newcommand{\data_wystawienia_faktury}{ {{ faktura.data_wystawienia }} }
 %\newcommand{\terminplatnosci}{17.03.2006}
@@ -43,16 +43,17 @@
    {% if faktura.klient.adres_trzecia_linijka %}   {{ faktura.klient.adres_trzecia_linijka }} \\
    {% if faktura.klient.adres_czwarta_linijka %}   {{ faktura.klient.adres_czwarta_linijka }} \\   {% endif %}   {% endif %}   {% endif %}
   NIP {{ faktura.klient.nip }} 
-\\ \ \\
- \begin{tabular}{r l l r p{2cm} p{2cm} l r p{2cm}}
+  \\ \ \\
+  \small
+  \begin{tabular}{p{0.5cm} p{6.3cm} p{1cm} p{0.7cm} p{0.7cm} p{1.5cm} p{1cm} p{0.8cm} p{1cm} p{1.7cm}}
   \hline 
-  Lp & Nazwa usługi & j.m. & Ilość & Cena jedn.\newline netto & Wartość netto & VAT & Podatek & Wartość z podatkiem \\ 
+  Lp & Nazwa usługi & PKWIU & j.m. & Ilość & Cena jedn.\newline netto & Wartość netto & VAT & Podatek & Wartość z podatkiem \\ 
    \hline
    {% for poz in pozycje %}
-   {{ loop.index }} & {{ poz.wyswietlana_nazwa or poz.nazwa }} & {{ poz.jm }} & {{ poz.ile }} & {{ poz.netto_za_sztuke }} & {{ poz.wartosc_netto }} & {{ poz.podatek_proc }} \% & {{ poz.podatek_zl }} & {{ poz.brutto }} \\
+   {{ loop.index }} & {{ poz.wyswietlana_nazwa or poz.nazwa }} & {{ poz.pkwiu }} & {{ poz.jm }} & {{ poz.ile }} & {{ poz.netto_za_sztuke }} & {{ poz.wartosc_netto }} & {{ poz.podatek_proc }} \% & {{ poz.podatek_zl }} & {{ poz.brutto }} \\
    {% endfor %}
   \hline
-  & & & & Razem: & \netto & & \vat & \brutto \\
+  & & & & & Razem: & \netto & & \vat & \brutto \\
 %   & & & & W tym: & \netto &  & \vat & \brutto \\
   \\
   

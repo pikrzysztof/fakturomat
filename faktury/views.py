@@ -34,13 +34,14 @@ def przygotuj_fakture(id_faktury, request):
 		             request.POST.getlist('netto'),
 		             request.POST.getlist('poz_id'))
 		for (nazwa, ile, podatek_proc, netto, id) in zipped:
-			ile = int(ile)
+			ile = Decimal(ile)
 			przedmiot = get_object_or_404(PrzedmiotUmowy, pk=int(id))
 			netto = Decimal(netto).quantize(Decimal('0.01'))
 			wartosc_netto = (ile * netto).quantize(Decimal('0.01'))
 			podatek_zl = (wartosc_netto * Decimal(podatek_proc) / Decimal(100)).quantize(Decimal('0.01'))
 
 			poz = { 'wyswietlana_nazwa': nazwa,
+                                'pkwiu': przedmiot.pkwiu,
 			        'jm': przedmiot.jm.nazwa,
 			        'ile': ile,
 			        'netto_za_sztuke': netto,
@@ -53,7 +54,7 @@ def przygotuj_fakture(id_faktury, request):
 			netto_total += wartosc_netto
 			vat += podatek_zl
 			pozycje.append(poz)
-		#import pdb; pdb.set_trace()
+
 		brutto_total = vat + netto_total
 		slownik = {
 			'faktura': faktura,
