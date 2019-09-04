@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Faktura, Firma, PrzedmiotUmowy
@@ -12,12 +13,14 @@ from math import modf
 
 # Create your views here.
 
+@login_required
 def manage_faktura(request, id_faktury):
 	faktura = get_object_or_404(Faktura, pk=id_faktury)
 	slownik = { 'faktura': faktura}
 
 	return render(request, 'formularz.html', slownik)
 
+@login_required
 def przygotuj_fakture(id_faktury, request):
 	if not os.path.isdir(str(id_faktury)):
 		os.mkdir(str(id_faktury))
@@ -67,6 +70,7 @@ def przygotuj_fakture(id_faktury, request):
 	subprocess.check_call(['pdflatex', '-halt-on-error', '-output-directory',  str(id_faktury),
 	                       os.path.join(str(id_faktury), 'faktura.tex')])
 
+@login_required
 def gen_faktura(request, id_faktury):
 	if request.method == 'POST':
 		przygotuj_fakture(id_faktury, request)
@@ -76,6 +80,7 @@ def gen_faktura(request, id_faktury):
 def healthz(_request):
 	return HttpResponse(status=200)
 
+@login_required
 def glowna(_request):
 	return render(_request, 'glowna.html', {'faktury': Faktura.objects.all()})
 
