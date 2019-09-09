@@ -1,0 +1,19 @@
+{% extends 'szkielet.html' %}
+{%  block tytul %}
+Lista faktur
+{%  endblock %}
+
+{% block zawartosc %}
+
+    <ul>
+        {% for fak in faktury %}
+            <li><a href="{% url 'manage_faktura' fak.id %}">{{ fak.wystawiajacy }} dla {{ fak.lient }} dnia {{ fak.data_wystawienia }}</a>
+            <a href="{% url 'view_faktura' fak.id %}">Obejrzyj fakturę</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="../admin/faktury/faktura">Admin faktur</a>
+    <br>
+    <a href="../admin/faktury/faktura/add">Dodaj fakturę</a>
+    <br>
+{% endblock %}
