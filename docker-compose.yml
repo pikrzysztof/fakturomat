@@ -11,9 +11,12 @@ services:
       - DB_NAME=postgres
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+      - DEBUG=True
+      - SECRET_KEY=security-fail
     ports:
       - "8080:8080"
     volumes:
+      - /tmp/xx:/code/gen_faktury
       - .:/code
     depends_on:
       - db
