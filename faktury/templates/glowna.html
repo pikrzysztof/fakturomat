@@ -7,7 +7,7 @@ Lista faktur
 
     <ul>
         {% for fak in faktury %}
-            <li><a href="{% url 'manage_faktura' fak.id %}">{{ fak.wystawiajacy }} dla {{ fak.lient }} dnia {{ fak.data_wystawienia }}</a>
+            <li><a href="{% url 'manage_faktura' fak.id %}">{{ fak.wystawiajacy }} dla {{ fak.klient }} dnia {{ fak.data_wystawienia }}</a>
             <a href="{% url 'view_faktura' fak.id %}">Obejrzyj fakturę</a>
             </li>
         {% endfor %}

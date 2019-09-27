@@ -19,13 +19,13 @@ Wygeneruj fakture
         <td>% podatku</td>
         <td>cena netto</td>
     </tr>
-        {% for poz in faktura.pozycje.all %}
+        {% for poz in ilepoz %}
             <tr>
-            <td>{{ poz.nazwa }}</td>
-            <td><input type="text" name="wyswietlana_nazwa" placeholder="wyswietlana nazwa" id="wysw_nazwa"></td>
-            <td><input type="text" name="ile" placeholder="ile" >({{poz.jm}})</td>
-            <td><input type="text" name="podatek" placeholder="% podatku"></td>
-            <td><input type="text" name="netto" placeholder="cena netto"></td>
+            <td>{{ poz.pozycja.nazwa }}</td>
+            <td><input type="text" name="wyswietlana_nazwa" placeholder="wyswietlana nazwa" {% if poz.wyswietlana_nazwa %} value="{{ poz.wyswietlana_nazwa   }}" {% endif %} id="wysw_nazwa"></td>
+            <td><input type="text" name="ile" placeholder="ile" value="{{ poz.ile }}">({{poz.pozycja.jm}})</td>
+            <td><input type="text" name="podatek" placeholder="% podatku" value="{{ poz.podatek_proc }}"></td>
+            <td><input type="text" name="netto" placeholder="cena netto" value="{{ poz.netto }}"<td></td>
              <input type="hidden" name="poz_id" value="{{ poz.id }}">
             </tr>
         {% endfor %}

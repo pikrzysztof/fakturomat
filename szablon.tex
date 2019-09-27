@@ -11,10 +11,10 @@
 % \newcommand{\data_wystawienia_faktury}{ {{ faktura.data_wystawienia }} }
 %\newcommand{\terminplatnosci}{17.03.2006}
 \newcommand{\nrfaktury}{ {{ faktura.numer }} }
-\newcommand{\netto}{ {{ netto_total }} }
-\newcommand{\vat}{ {{ vat }} }
-\newcommand{\brutto}{ {{ netto_total + vat }} }
-\newcommand{\slownie}{ {{ slownie_brutto }} }
+\newcommand{\netto}{ {{ faktura.suma_netto() }} }
+\newcommand{\vat}{ {{ faktura.vat() }} }
+\newcommand{\brutto}{ {{ faktura.suma_brutto() }} }
+\newcommand{\slownie}{ {{ faktura.slownie_brutto() }} }
 % Koniec danych do faktury
 
 \begin{document}
@@ -45,22 +45,22 @@
   NIP {{ faktura.klient.nip }} 
   \\ \ \\
   \small
-  \begin{tabular}{p{0.5cm} p{6.3cm} p{1cm} p{0.7cm} p{0.7cm} p{1.5cm} p{1cm} p{0.8cm} p{1cm} p{1.7cm}}
-  \hline 
-  Lp & Nazwa usługi & PKWIU & j.m. & Ilość & Cena jedn.\newline netto & Wartość netto & VAT & Podatek & Wartość z podatkiem \\ 
-   \hline
+  \begin{tabular}{p{0.5cm} p{6.3cm} p{1cm} p{0.7cm} p{0.7cm} p{1.5cm} p{1cm} p{0.8cm} p{1cm} p{2cm}}
+  \hline
+  Lp. & Nazwa usługi & PKWIU & j.m. & Ilość & Cena jedn.\newline netto & Suma netto & VAT\% & VAT & Suma brutto \\
+    \hline
    {% for poz in pozycje %}
-   {{ loop.index }} & {{ poz.wyswietlana_nazwa or poz.nazwa }} & {{ poz.pkwiu }} & {{ poz.jm }} & {{ poz.ile }} & {{ poz.netto_za_sztuke }} & {{ poz.wartosc_netto }} & {{ poz.podatek_proc }} \% & {{ poz.podatek_zl }} & {{ poz.brutto }} \\
+    {{ loop.index }} & {{ poz.wyswietlana_nazwa or poz.pozycja.nazwa }} & {{ poz.pozycja.pkwiu }} & {{ poz.pozycja.jm }} & {{ '%g' | format(poz.ile) }} & {{ '%.2f' | format(poz.netto) }} & {{ '%.2f' | format(poz.netto_calosc()) }} & {{ '%g' | format(poz.podatek_proc) }} \% & {{ poz.podatek_zl() }} & {{ poz.brutto_calosc() }} \\
+    \hline
    {% endfor %}
   \hline
   & & & & & Razem: & \netto & & \vat & \brutto \\
-%   & & & & W tym: & \netto &  & \vat & \brutto \\
   \\
   
  \end{tabular}
-
+\normalsize
  \ \\
- Słownie: {{ slownie_brutto }}\\
+ Słownie: \slownie
  \ \\
  Forma płatności: {{ faktura.forma_platnosci }} \\
  Termin płatności: {{ faktura.termin_platnosci }} \\
