@@ -76,7 +76,7 @@ class Faktura(models.Model):
         termin_platnosci = models.DateField(default=datetime.date.today)
         forma_platnosci = models.ForeignKey(FormaPlatnosci,
                                             on_delete=models.PROTECT)
-        oplacone = models.BooleanField(default=False)
+        kiedy_oplacone = models.DateField(null=True)
 
         def suma_netto(self):
                 pozycje = IlePozycji.objects.filter(faktura=self)
