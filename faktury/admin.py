@@ -21,8 +21,10 @@ class FakturaAdmin(admin.ModelAdmin):
 	search_fields = ('wystawiajacy', 'klient',
 	                 'numer', 'data_sprzedazy', 'data_wystawienia',
 	                 'termin_platnosci', 'forma_platnosci')
+	autocomplete_fields = ('wystawiajacy', 'klient')
 	list_display = ('wystawiajacy', 'klient', 'numer',
 	                'data_wystawienia', 'data_sprzedazy')
+	filter_horizontal = ('pozycje', )
 
 admin.site.register(Faktura, FakturaAdmin)
 
