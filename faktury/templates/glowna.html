@@ -4,16 +4,30 @@ Lista faktur
 {%  endblock %}
 
 {% block zawartosc %}
-
-    <ul>
-        {% for fak in faktury %}
-            <li><a href="{% url 'manage_faktura' fak.id %}">{{ fak.wystawiajacy }} dla {{ fak.klient }} dnia {{ fak.data_wystawienia }}</a>
-            <a href="{% url 'view_faktura' fak.id %}">Obejrzyj fakturę</a>
-            </li>
-        {% endfor %}
-    </ul>
     <a href="../admin/faktury/faktura">Admin faktur</a>
+    <br>
     <br>
     <a href="../admin/faktury/faktura/add">Dodaj fakturę</a>
     <br>
+    <br>
+<table border="1" cellpadding="5">
+  <tr>
+    <td>Wystawiający</td>
+    <td>Klient</td>
+    <td>Wystawiono dnia</td>
+    <td>Zapłacono dnia</td>
+    <td>Obejrzyj fakturę (jeśli jest)</td>
+  </tr>
+
+      {% for fak in faktury %}
+      <tr>
+        <td><a href="{% url 'manage_faktura' fak.id %}">{{ fak.wystawiajacy }}</td>
+	<td>{{ fak.klient }}</td>
+	<td>{{ fak.data_wystawienia }}</td>
+	<td>{{ fak.kiedy_oplacone }}</td>
+	<td><a href="{% url 'view_faktura' fak.id %}">Obejrzyj fakturę</a> </td>
+      </tr>
+      {% endfor %}
+    </table>
+
 {% endblock %}

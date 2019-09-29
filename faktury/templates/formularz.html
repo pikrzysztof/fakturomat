@@ -4,14 +4,14 @@ Wygeneruj fakture
 {% endblock %}
 
 {% block zawartosc %}
-
+<br>
 <form class="form-inline"
 	role="form"
 	action="{{ faktura.id }}/faktura.pdf"
 	method="post">
 {% csrf_token %}
 {%  if faktura.pozycje.all %}
-    <table style="width:100%">
+    <table style="width:100%" border="1" cellpadding="5">
     <tr>
         <td>nazwa</td>
         <td>wyświetlana nazwa (opcjonalnie)</td>
