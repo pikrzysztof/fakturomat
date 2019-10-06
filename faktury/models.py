@@ -106,6 +106,7 @@ class IlePozycji(models.Model):
                                   decimal_places=5, null=False)
         podatek_proc = models.DecimalField(max_digits=5, decimal_places=3, default=Decimal('8'),
                                            null=False)
+        numer_na_fakturze = models.FloatField(null=True)
         netto = models.DecimalField(max_digits=20, default=Decimal('0'), decimal_places=5)
         wyswietlana_nazwa = models.CharField(max_length=300,
                                              null=True, blank=True)

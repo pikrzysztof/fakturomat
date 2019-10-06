@@ -50,7 +50,7 @@
   Lp. & Nazwa usługi & PKWIU & j.m. & Ilość & Cena jedn.\newline netto & Suma netto & VAT\% & VAT & Suma brutto \\
     \hline
    {% for poz in pozycje %}
-    {{ loop.index }} & {{ poz.wyswietlana_nazwa or poz.pozycja.nazwa }} & {{ poz.pozycja.pkwiu }} & {{ poz.pozycja.jm }} & {{ '%g' | format(poz.ile) }} & {{ '%.2f' | format(poz.netto) }} & {{ '%.2f' | format(poz.netto_calosc()) }} & {{ '%g' | format(poz.podatek_proc) }} \% & {{ poz.podatek_zl() }} & {{ poz.brutto_calosc() }} \\
+    {{ loop.index }} & {{ poz.wyswietlana_nazwa or poz.pozycja.nazwa }} & {{ poz.pozycja.pkwiu }} & {{ poz.pozycja.jm }} & {{ '%g' | format(poz.ile) }} & {% if poz.netto %} {{ '%.2f' | format(poz.netto) }} & {{ '%.2f' | format(poz.netto_calosc()) }} & {{ '%g' | format(poz.podatek_proc) }} \% & {{ poz.podatek_zl() }} & {{ poz.brutto_calosc() }} {% else %} & & & {% endif %}\\
     \hline
    {% endfor %}
   \hline

@@ -1,3 +1,4 @@
+from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
@@ -20,6 +21,7 @@ def faktura_dir(id):
         return os.path.join('gen_faktury', str(id))
 
 # wyswietla strone do wypelnienia IlePozycji
+@never_cache
 @login_required
 def manage_faktura(request, id_faktury):
         faktura = get_object_or_404(Faktura, pk=id_faktury)
@@ -27,7 +29,7 @@ def manage_faktura(request, id_faktury):
         for poz in faktura.pozycje.all():
                 obj, created = IlePozycji.objects.get_or_create(faktura=faktura, pozycja=poz)
                 ilepoz.append(obj or created)
-        slownik = { 'faktura': faktura, 'ilepoz': ilepoz}
+        slownik = { 'faktura': faktura, 'ilepoz': sorted(ilepoz, key=lambda x: x.numer_na_fakturze or -1)}
         return render(request, 'formularz.html', slownik)
 
 # requst to POST z rzeczami wypelnionymi w manage_faktura
@@ -42,14 +44,16 @@ def przygotuj_fakture(request, id_faktury):
                      request.POST.getlist('ile'),
                      request.POST.getlist('podatek'),
                      request.POST.getlist('netto'),
-                     request.POST.getlist('poz_id'))
+                     request.POST.getlist('poz_id'),
+                     request.POST.getlist('poz_na_fakturze'))
         faktura = get_object_or_404(Faktura, pk=id_faktury)
-        for (nazwa, ile, podatek_proc, netto, id) in zipped:
-                IlePozycji.objects.filter(pk=id).update(ile=obetnij_zera(Decimal(ile)),
-                                                        podatek_proc=obetnij_zera(Decimal(podatek_proc)),
-                                                        netto=Decimal(netto).quantize(Decimal('0.01')),
-                                                        wyswietlana_nazwa=nazwa)
-        poz = IlePozycji.objects.filter(faktura=faktura)
+        for (nazwa, ile, podatek_proc, netto, pid, poz_na_fakturze) in zipped:
+                IlePozycji.objects.filter(pk=pid).update(ile=obetnij_zera(Decimal(ile)),
+                                                         podatek_proc=obetnij_zera(Decimal(podatek_proc)),
+                                                         netto=Decimal(netto).quantize(Decimal('0.01')),
+                                                         wyswietlana_nazwa=nazwa,
+                                                         numer_na_fakturze=float(poz_na_fakturze))
+        poz = IlePozycji.objects.filter(faktura=faktura).order_by('numer_na_fakturze')
         slownik = {'faktura': faktura,
                    'pozycje': poz}
         # i dopiero teraz wypelnic ten szablon
@@ -69,6 +73,7 @@ def gen_faktura(request, id_faktury):
 def healthz(_request):
         return HttpResponse(status=200)
 
+@never_cache
 @login_required
 def glowna(_request):
         return render(_request, 'glowna.html', {'faktury': Faktura.objects.all()})

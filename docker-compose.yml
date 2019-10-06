@@ -5,6 +5,7 @@ volumes:
 
 services:
   fakturomat:
+    image: fakturomat:latest
     build: .
     environment:
       - DB_HOST=db

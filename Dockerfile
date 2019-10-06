@@ -1,9 +1,9 @@
 FROM archlinux/base:latest
 
 WORKDIR /code
-RUN pacman -Sy --noconfirm python python-pip texlive-bin texlive-core
-COPY requirements.txt /code/
-RUN pip3 install -r requirements.txt
+RUN pacman -Sy --noconfirm python python-pip texlive-bin texlive-core gcc
+RUN pip3 install Django psycopg2-binary slownie jinja2 uwsgi
+
 COPY . /code
 EXPOSE 8080
 

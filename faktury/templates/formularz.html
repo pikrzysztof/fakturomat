@@ -12,21 +12,25 @@ Wygeneruj fakture
 {% csrf_token %}
 {%  if faktura.pozycje.all %}
     <table style="width:100%" border="1" cellpadding="5">
-    <tr>
+      <tr>
+	<td>pozycja na fakturze</td>
         <td>nazwa</td>
         <td>wyświetlana nazwa (opcjonalnie)</td>
         <td>ile j.m.</td>
+
+	<td>cena netto</td>
         <td>% podatku</td>
-        <td>cena netto</td>
+
     </tr>
-        {% for poz in ilepoz %}
-            <tr>
-            <td>{{ poz.pozycja.nazwa }}</td>
-            <td><input type="text" name="wyswietlana_nazwa" placeholder="wyswietlana nazwa" {% if poz.wyswietlana_nazwa %} value="{{ poz.wyswietlana_nazwa   }}" {% endif %} id="wysw_nazwa"></td>
-            <td><input type="text" name="ile" placeholder="ile" value="{{ poz.ile }}">({{poz.pozycja.jm}})</td>
-            <td><input type="text" name="podatek" placeholder="% podatku" value="{{ poz.podatek_proc }}"></td>
-            <td><input type="text" name="netto" placeholder="cena netto" value="{{ poz.netto }}"<td></td>
-             <input type="hidden" name="poz_id" value="{{ poz.id }}">
+      {% for poz in ilepoz %}
+      <tr>
+	<td><input type="text" name="poz_na_fakturze" value="{{ poz.numer_na_fakturze|default:forloop.counter }}"></td>
+        <td>{{ poz.pozycja.nazwa }}</td>
+        <td><input type="text" name="wyswietlana_nazwa" placeholder="wyswietlana nazwa" {% if poz.wyswietlana_nazwa %} value="{{ poz.wyswietlana_nazwa }}" {% endif %} id="wysw_nazwa"></td>
+        <td><input type="text" name="ile" placeholder="ile" value="{{ poz.ile }}">({{poz.pozycja.jm}})</td>
+        <td><input type="text" name="netto" placeholder="cena netto" value="{{ poz.netto }}"</td>
+        <td><input type="text" name="podatek" placeholder="% podatku" value="{{ poz.podatek_proc }}"></td>
+        <input type="hidden" name="poz_id" value="{{ poz.id }}">
             </tr>
         {% endfor %}
     </table>
