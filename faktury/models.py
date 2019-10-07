@@ -22,11 +22,15 @@ class PrzedmiotUmowy(models.Model):
         jm = models.ForeignKey(JednostkaMiary,
                                on_delete=models.PROTECT,
                                help_text='Jednostka (metry, godziny)',
-                               null=True)
+                               null=True,
+                               blank=True)
         pkwiu = models.CharField(max_length=300, blank=True, null=True)
 
         def __str__(self):
-                return f'{self.nazwa} ({self.jm.nazwa})'
+                if self.jm:
+                        return f'{self.nazwa} ({self.jm.nazwa})'
+                else:
+                        return f'{self.nazwa}'
 
         class Meta:
                 verbose_name_plural = "Przedmioty umowy"
@@ -76,7 +80,7 @@ class Faktura(models.Model):
         termin_platnosci = models.DateField(default=datetime.date.today)
         forma_platnosci = models.ForeignKey(FormaPlatnosci,
                                             on_delete=models.PROTECT)
-        kiedy_oplacone = models.DateField(null=True)
+        kiedy_oplacone = models.DateField(null=True, blank=True)
 
         def suma_netto(self):
                 pozycje = IlePozycji.objects.filter(faktura=self)
