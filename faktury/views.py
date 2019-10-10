@@ -11,6 +11,8 @@ import sys
 import subprocess
 import re
 from math import modf
+import locale
+
 #from import templatetags import obetnij_zera
 
 def obetnij_zera(num):
@@ -48,11 +50,14 @@ def przygotuj_fakture(request, id_faktury):
                      request.POST.getlist('poz_na_fakturze'))
         faktura = get_object_or_404(Faktura, pk=id_faktury)
         for (nazwa, ile, podatek_proc, netto, pid, poz_na_fakturze) in zipped:
-                IlePozycji.objects.filter(pk=pid).update(ile=obetnij_zera(Decimal(ile)),
-                                                         podatek_proc=obetnij_zera(Decimal(podatek_proc)),
-                                                         netto=Decimal(netto).quantize(Decimal('0.01')),
-                                                         wyswietlana_nazwa=nazwa,
-                                                         numer_na_fakturze=float(poz_na_fakturze))
+                poz = get_object_or_404(IlePozycji, pk=pid)
+                print(ile)
+                poz.ile = obetnij_zera(Decimal(ile.replace(',', '.')))
+                poz.podatek_proc = obetnij_zera(Decimal(podatek_proc.replace(',', '.')))
+                poz.netto = Decimal(netto.replace(',', '.')).quantize(Decimal('0.01'))
+                poz.wyswietlana_nazwa = nazwa
+                poz.numer_na_fakturze = float(poz_na_fakturze.replace(',', '.'))
+                poz.save()
         poz = IlePozycji.objects.filter(faktura=faktura).order_by('numer_na_fakturze')
         slownik = {'faktura': faktura,
                    'pozycje': poz}

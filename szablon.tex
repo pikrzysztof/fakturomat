@@ -11,9 +11,9 @@
 % \newcommand{\data_wystawienia_faktury}{ {{ faktura.data_wystawienia }} }
 %\newcommand{\terminplatnosci}{17.03.2006}
 \newcommand{\nrfaktury}{ {{ faktura.numer }} }
-\newcommand{\netto}{ {{ faktura.suma_netto() }} }
-\newcommand{\vat}{ {{ faktura.vat() }} }
-\newcommand{\brutto}{ {{ faktura.suma_brutto() }} }
+\newcommand{\netto}{ {{ faktura.suma_netto_printer() }} }
+\newcommand{\vat}{ {{ faktura.vat_printer() }} }
+\newcommand{\brutto}{ {{ faktura.suma_brutto_printer() }} }
 \newcommand{\slownie}{ {{ faktura.slownie_brutto() }} }
 % Koniec danych do faktury
 
@@ -42,7 +42,7 @@
    {% if faktura.klient.adres_druga_linijka %}   {{ faktura.klient.adres_druga_linijka }} \\
    {% if faktura.klient.adres_trzecia_linijka %}   {{ faktura.klient.adres_trzecia_linijka }} \\
    {% if faktura.klient.adres_czwarta_linijka %}   {{ faktura.klient.adres_czwarta_linijka }} \\   {% endif %}   {% endif %}   {% endif %}
-  NIP {{ faktura.klient.nip }} 
+  NIP {{ faktura.klient.nip }}
   \\ \ \\
   \small
   \begin{tabular}{p{0.5cm} p{6.3cm} p{1cm} p{0.7cm} p{0.7cm} p{1.5cm} p{1cm} p{0.8cm} p{1cm} p{2cm}}
@@ -50,13 +50,26 @@
   Lp. & Nazwa usługi & PKWIU & j.m. & Ilość & Cena jedn.\newline netto & Suma netto & VAT\% & VAT & Suma brutto \\
     \hline
    {% for poz in pozycje %}
-    {{ loop.index }} & {{ poz.wyswietlana_nazwa or poz.pozycja.nazwa }} & {{ poz.pozycja.pkwiu }} & {{ poz.pozycja.jm }} & {{ '%g' | format(poz.ile) }} & {% if poz.netto %} {{ '%.2f' | format(poz.netto) }} & {{ '%.2f' | format(poz.netto_calosc()) }} & {{ '%g' | format(poz.podatek_proc) }} \% & {{ poz.podatek_zl() }} & {{ poz.brutto_calosc() }} {% else %} & & & {% endif %}\\
+    {{ loop.index }}
+      & {{ poz.wyswietlana_nazwa or poz.pozycja.nazwa }}
+      & {% if poz.pozycja.pkwiu %} {{ poz.pozycja.pkwiu }} {% endif %}
+      & {% if poz.pozycja.jm %} {{ poz.pozycja.jm }} {% endif %}
+      & {{ poz.ile_print() }}
+      & {% if poz.netto %}
+           {{ poz.netto_print() }}
+         & {{ poz.netto_calosc_print() }}
+         & {{ poz.podatek_proc_print() }} \%
+         & {{ poz.podatek_zl_print() }}
+         & {{ poz.brutto_calosc_print() }}
+       {% else %}
+         & & &
+       {% endif %} \\
     \hline
    {% endfor %}
   \hline
   & & & & & Razem: & \netto & & \vat & \brutto \\
   \\
-  
+
  \end{tabular}
 \normalsize
  \ \\
