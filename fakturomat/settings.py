@@ -21,18 +21,58 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
-SECURE_HSTS_PRELOAD = True
-SECURE_HSTS_SECONDS = 60000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SESSION_COOKIE_SECURE = True
-X_FRAME_OPTIONS = 'DENY'
-CSRF_COOKIE_SECURE = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ['DEBUG'] == 'True')
 
+EXTRA_MIDDLEWARE = []
+if not DEBUG:
+	CSRF_COOKIE_HTTPONLY = True
+	CSRF_COOKIE_NAME = '__Host-csrftoken'
+	CSRF_COOKIE_SAMESITE = 'Strict'
+	CSRF_COOKIE_SECURE = True
+	SESSION_COOKIE_AGE = 2 * 3600
+	SESSION_COOKIE_HTTPONLY = True
+	SESSION_COOKIE_NAME = '__Host-sessionid'
+	SESSION_COOKIE_SAMESITE = 'Strict'
+	SESSION_COOKIE_SECURE = True
+	CSP_DEFAULT_SRC = ('https://ksiazekrzysztof.pl:443', )
+	CSRF_COOKIE_SECURE = True
+	REFERRER_POLICY = 'same-origin'
+	SECURE_BROWSER_XSS_FILTER = True
+	SECURE_CONTENT_TYPE_NOSNIFF = True
+	SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+	SECURE_HSTS_PRELOAD = True
+	SECURE_HSTS_SECONDS = 2592000 # 30 dni
+	SESSION_COOKIE_SECURE = True
+	X_FRAME_OPTIONS = 'DENY'
+
+	FEATURE_POLICY = {
+		'accelerometer': 'none',
+		'ambient-light-sensor': 'none',
+		'autoplay': 'none',
+		'camera': 'none',
+		'document-domain': 'none',
+		'fullscreen': 'none',
+		'execution-while-not-rendered': 'none',
+		'execution-while-out-of-viewport': 'none',
+		'gyroscope': 'none',
+		'magnetometer': 'none',
+		'microphone': 'none',
+		'midi': 'none',
+		'payment': 'none',
+		'picture-in-picture': 'none',
+		'publickey-credentials': 'none',
+		'sync-xhr': 'none',
+		'usb': 'none',
+		'wake-lock': 'none',
+		'xr-spatial-tracking': 'none'
+	}
+	EXTRA_MIDDLEWARE = [
+		'csp.middleware.CSPMiddleware',
+		'django_feature_policy.FeaturePolicyMiddleware',
+		'django_referrer_policy.middleware.ReferrerPolicyMiddleware',
+	]
 ALLOWED_HOSTS = ['*']
 
 
@@ -57,7 +97,7 @@ MIDDLEWARE = [
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+] + EXTRA_MIDDLEWARE
 
 ROOT_URLCONF = 'fakturomat.urls'
 
