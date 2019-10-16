@@ -54,19 +54,15 @@ if not DEBUG:
 		'camera': 'none',
 		'document-domain': 'none',
 		'fullscreen': 'none',
-		'execution-while-not-rendered': 'none',
-		'execution-while-out-of-viewport': 'none',
 		'gyroscope': 'none',
 		'magnetometer': 'none',
 		'microphone': 'none',
 		'midi': 'none',
 		'payment': 'none',
 		'picture-in-picture': 'none',
-		'publickey-credentials': 'none',
 		'sync-xhr': 'none',
 		'usb': 'none',
 		'wake-lock': 'none',
-		'xr-spatial-tracking': 'none'
 	}
 	EXTRA_MIDDLEWARE = [
 		'csp.middleware.CSPMiddleware',
